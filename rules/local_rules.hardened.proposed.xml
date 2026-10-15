@@ -1,0 +1,24 @@
+<!-- PROPOSED hardened versions from the Phase 8 review. NOT deployed and NOT tested.
+     Validate with: sudo /var/ossec/bin/wazuh-analysisd -t, then run a controlled test before replacing the live rules. -->
+<group name="lab_custom_detections,">
+
+  <rule id="100101" level="10">
+    <if_sid>61603</if_sid>
+    <field name="win.eventdata.parentImage" type="pcre2">(?i)\\cmd\.exe$</field>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\powershell\.exe$</field>
+    <description>PowerShell spawned by cmd.exe</description>
+    <group>sysmon,powershell,process_creation,</group>
+  </rule>
+
+  <rule id="100102" level="10">
+    <if_sid>61603</if_sid>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\schtasks\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)\s/create(\s|$)</field>
+    <description>Scheduled task created using schtasks.exe</description>
+    <mitre>
+      <id>T1053.005</id>
+    </mitre>
+    <group>sysmon,persistence,scheduled_task,</group>
+  </rule>
+
+</group>

@@ -1,0 +1,33 @@
+<!-- Wazuh custom rules as captured on 11 October 2026 (/var/ossec/etc/rules/local_rules.xml).
+     The sample rule 100001 that ships with Wazuh is omitted.
+     100101 and 100102 were confirmed working in the lab. 100103 is UNRESOLVED: no matching alert was verified. -->
+<group name="local,syslog,sshd,">
+
+  <rule id="100101" level="10">
+    <if_sid>61603</if_sid>
+    <field name="win.eventdata.parentImage" type="pcre2">(?i)cmd.exe</field>
+    <field name="win.eventdata.image" type="pcre2">(?i)powershell.exe</field>
+    <description>PowerShell spawned by cmd.exe</description>
+    <group>sysmon,powershell,process_creation,</group>
+  </rule>
+
+  <rule id="100102" level="10">
+    <if_sid>61603</if_sid>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\schtasks\.exe$</field>
+    <field name="win.eventdata.commandline" type="pcre2">(?i)\s/create(\s|$)</field>
+    <description>Scheduled task created using schtasks.exe</description>
+    <mitre>
+      <id>T1053.005</id>
+    </mitre>
+    <group>sysmon,persistence,scheduled_task.</group>
+  </rule>
+
+  <rule id="100103" level="8">
+    <if_group>sysmon_event3</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\powershell\.exe$</field>
+    <field name="win.eventdata.protocol">^tcp$</field>
+    <description>powershell initiated a TCP network connection to $(win.eventdata.destinationIp):$(win.eventdata.destinationPort)</description>
+    <group>sysmon_event3,powershell,network_connection,</group>
+  </rule>
+
+</group>
