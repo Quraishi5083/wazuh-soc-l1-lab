@@ -97,7 +97,7 @@ User, host and folder names in screenshots are redacted. Run any test from this 
 
 ## Author
 
-**Waqar**, BS Computer Science (Cybersecurity) student at the University of Buner, working towards a SOC Analyst role.
+**Waqar Ahmad**, BS Computer Science (Cybersecurity) student at the University of Buner, working towards a SOC Analyst role.
 
 ## License
 
